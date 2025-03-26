@@ -1,5 +1,5 @@
-import ProdutoDAO from "../persistence/produto.persistence.js";
-import Categoria from "./categoria.model.js"; // se for esse nome, senão muda dps
+import ProdutoPRT from "../persistence/produto.persistence.js";
+//import Categoria from "./categoria.model.js"; se for esse nome, senão muda dps
 
 export default class Produto{
     //Atributos
@@ -62,5 +62,41 @@ export default class Produto{
         this.#categoria = categoria;
     }
 
+    //Validações
 
+    validarProduto(produto){
+        if(produto instanceof Produto){
+            if(produto.descricao != "" && produto.marca != "" && produto.quantidade != 0){
+                return 1;
+            }
+            return 0;
+        }
+    }
+
+    validarIdProduto(idProduto){
+        if(idProduto > 0){
+            return 1;
+        }
+        return 0;
+    }
+
+    async incluir(conexao, produto) {
+        const produtoPRT = new ProdutoPRT();
+        return await produtoPRT.incluir(conexao, produto);
+    }
+
+    async editar(conexao, produto){
+        const produtoPRT = new ProdutoPRT();
+        return await produtoPRT.editar(conexao, produto);
+    }
+
+    async excluir(conexao, produto){
+        const produtoPRT = new ProdutoPRT();
+        return await produtoPRT.excluir(conexao, produto);
+    }
+
+    async consultar(conexao, termo){
+        const produtoPRT = new ProdutoPRT();
+        return await produtoPRT.consultar(conexao, termo);
+    }
 }
