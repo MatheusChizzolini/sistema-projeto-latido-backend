@@ -1,9 +1,6 @@
 import Usuario from "../model/usuario.model.js";
 
 export default class UsuarioPersistence {
-    constructor() {
-        this.init();
-    }
 
     async incluir(conexao, usuario) {
         if (usuario instanceof Usuario) {

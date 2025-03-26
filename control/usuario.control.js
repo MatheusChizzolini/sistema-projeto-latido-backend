@@ -9,7 +9,7 @@ export default class UsuarioControl {
             const senha = requisicao.body.senha;
             const privilegio = requisicao.body.privilegio;
 
-            const usuario = new usuario(email, senha, privilegio);
+            const usuario = new Usuario(email, senha, privilegio);
 
             const conexao = await Database.getInstance().getConnection();
             try {
@@ -99,7 +99,7 @@ export default class UsuarioControl {
             const usuario = new Usuario(email);
             const conexao = await Database.getInstance().getConnection();
             try{
-                if (usuario.validarEmail(usuario.email)) {                
+                if (usuario.validarEmail(usuario)) {                
                     usuario.excluir(conexao, usuario)
                         .then(() => {
                             resposta.status(200).json({

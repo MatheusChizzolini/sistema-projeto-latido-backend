@@ -50,7 +50,7 @@ export default class Usuario {
             if (usuario.email != "") {
                 return 1;
             }
-
+            
             return 0;
         }
     }
