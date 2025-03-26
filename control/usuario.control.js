@@ -142,7 +142,8 @@ export default class UsuarioControl {
         resposta.type("application/json");
         if (requisicao.method == "GET") {
             let email = requisicao.params.email;
-            if (isNaN(email)) {
+
+            if (!email) {
                 email = "";
             }
 
