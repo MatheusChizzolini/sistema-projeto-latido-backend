@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import rotaProduto from "./routes/produto.routes.js";
+import rotaCategoria from "./routes/categoria.routes.js";
 
 const host = "0.0.0.0";
 const porta = 4000;

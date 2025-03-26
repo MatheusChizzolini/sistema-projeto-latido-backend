@@ -1,5 +1,5 @@
 import ProdutoPRT from "../persistence/produto.persistence.js";
-//import Categoria from "./categoria.model.js"; se for esse nome, senão muda dps
+import Categoria from "./categoria.model.js";
 
 export default class Produto{
     //Atributos

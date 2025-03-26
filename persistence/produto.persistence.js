@@ -1,8 +1,34 @@
 import Produto from "../model/produto.model.js";
-//import Categoria from "../model/categoria.model.js"; se for esse o nome
+import Categoria from "../model/categoria.model.js";
 import Database from "../model/database.js";
 
 export default class ProdutoPersistence {
+    constructor(){
+        this.init();
+    }
+
+    async init() {
+        try 
+        {
+            const conexao = await Database.getInstance().getConnection();
+            const sql = `
+            CREATE TABLE IF NOT EXISTS produto(
+                idProduto INT NOT NULL AUTO_INCREMENT,
+                descricao VARCHAR(45) NOT NULL,
+                marca VARCHAR(45) NOT NULL,
+                quantidade INT NOT NULL,
+                idCategoria INT NOT NULL,
+                CONSTRAINT pk_produto PRIMARY KEY(idProduto),
+                CONSTRAINT fk_categoria FOREIGN KEY(idCategoria) REFERENCES categoria(idCategoria)
+            )
+        `;
+            await conexao.execute(sql);
+            await conexao.release();
+        }
+        catch (e) {
+            console.log("Não foi possível iniciar o banco de dados: " + e.message);
+        }
+    }
 
     async incluir(conexao, produto) {
         if (produto instanceof Produto) {
@@ -52,36 +78,45 @@ export default class ProdutoPersistence {
     async consultar(conexao, termo) {
         let sql = "";
         let parametros = [];
-        if (isNaN(parseInt(termo))) {
-            sql = `SELECT * FROM produto p
-                   INNER JOIN categoria c ON p.idCategoria = c.idCategoria
-                   WHERE descricao LIKE ?`;
+    
+        if (isNaN(parseInt(termo))) {   
+            sql = `SELECT p.*, c.idCategoria, c.nomeCategoria
+                   FROM produto p
+                   LEFT JOIN categoria c ON p.idCategoria = c.idCategoria
+                   WHERE p.descricao LIKE ?`;
             parametros = ['%' + termo + '%'];
-        }
-        else {
-            sql = `SELECT * FROM produto p
-                   INNER JOIN categoria c ON p.idCategoria = c.idCategoria
-                   WHERE idProduto = ?`
+        } else {
+            sql = `SELECT p.*, c.idCategoria, c.nomeCategoria 
+                   FROM produto p
+                   LEFT JOIN categoria c ON p.idCategoria = c.idCategoria
+                   WHERE p.idProduto = ?`;
             parametros = [termo];
         }
-
+    
         const [linhas, campos] = await conexao.execute(sql, parametros);
         let listaProdutos = [];
+    
         for (const linha of linhas) {
-            //const categoria = new Categoria(linha.idCategoria,linha.descricao);
+    
+            const categoria = linha.idCategoria 
+                ? { idCategoria: linha.idCategoria, nomeCategoria: linha.nomeCategoria }
+                : null;
+    
             const produto = {
-                codigo:linha.idProduto,
-                descricao:linha.descricao,
-                marca:linha.marca,
-                quantidade:linha.quantidade
-                //categoria
+                codigo: linha.idProduto,
+                descricao: linha.descricao,
+                marca: linha.marca,
+                quantidade: linha.quantidade,
+                categoria
             };
-            //console.log(JSON.stringify(categoria));
+    
             listaProdutos.push(produto);
-            console.log(JSON.stringify(produto));
         }
+    
         conexao.release();
         return listaProdutos;
     }
+    
+    
     
 }
