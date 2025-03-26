@@ -1,6 +1,6 @@
 import Produto from "../model/produto.model.js";
 import Database from "../model/database.js"
-//import Categoria from "../Modelo/categoria.js";
+//import Categoria from "../model/categoria.model.js";
 
 export default class ProdutoControl {
 
@@ -27,7 +27,7 @@ export default class ProdutoControl {
                             resposta.status(200).json({
                                 "status": true,
                                 "mensagem": "Produto adicionado com sucesso!",
-                                "codigo": produto.idProduto
+                                "idProduto": produto.idProduto
                             });
                         })
                         .catch((erro) => {

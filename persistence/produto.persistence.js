@@ -17,7 +17,7 @@ export default class ProdutoPersistence {
             ];
 
             const resultado = await conexao.execute(sql, parametros);
-            produto.codigo = resultado[0].insertId;
+            produto.idProduto = resultado[0].insertId;
             await conexao.release();
         }
     }

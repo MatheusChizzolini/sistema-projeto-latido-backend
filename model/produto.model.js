@@ -87,7 +87,7 @@ export default class Produto{
 
     async editar(conexao, produto){
         const produtoPRT = new ProdutoPRT();
-        return await produtoPRT.editar(conexao, produto);
+        return await produtoPRT.alterar(conexao, produto);
     }
 
     async excluir(conexao, produto){
