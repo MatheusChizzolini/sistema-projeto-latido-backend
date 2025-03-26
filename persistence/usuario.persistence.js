@@ -1,6 +1,30 @@
+import Database from "../model/database.js";
 import Usuario from "../model/usuario.model.js";
 
 export default class UsuarioPersistence {
+    constructor(){
+        this.init();
+    }
+
+    async init(){
+        try {
+            const conexao = await Database.getInstance().getConnection();
+            const sql = `
+                CREATE TABLE IF NOT EXISTS usuario (
+                    email VARCHAR(50) NOT NULL,
+                    senha VARCHAR(50) NOT NULL,
+                    privilegio CHAR NOT NULL,
+                    CONSTRAINT pk_usuario PRIMARY KEY(email),
+                    CONSTRAINT uk_email UNIQUE (email)
+                )
+            `;
+            await conexao.execute(sql);
+            await conexao.release();
+        }
+        catch(e) {
+            console.log("Não foi possível iniciar o banco de dados: " + e.message);
+        }
+    }
 
     async incluir(conexao, usuario) {
         if (usuario instanceof Usuario) {
@@ -50,7 +74,7 @@ export default class UsuarioPersistence {
         let parametros = [];
 
         if (termo) {
-            sql = ` WHERE descricao LIKE ?`;
+            sql = ` WHERE email LIKE ?`;
             parametros = [termo];
         }
 
