@@ -1,7 +1,6 @@
-
 import AnimalDAO from "../persistence/animal.persistence.js";
-export default class Animal
-{
+
+export default class Animal {
     #id;
     #nome;
     #raca;
@@ -11,129 +10,106 @@ export default class Animal
     #observacao;
     #chip;
 
-    constructor(id=0, nome="", raca="", status="", peso=0, porte="", observacao="", chip=0)
-    {
-        this.#id=id;
-        this.#nome=nome;
-        this.#raca=raca;
-        this.#status=status;
-        this.#peso=peso;
-        this.#porte=porte;
-        this.#observacao=observacao;
-        this.#chip=chip
+    constructor(id = 0, nome = "", raca = "", status = "", peso = 0, porte = "", observacao = "", chip = 0) {
+        this.#id = id;
+        this.#nome = nome;
+        this.#raca = raca;
+        this.#status = status;
+        this.#peso = peso;
+        this.#porte = porte;
+        this.#observacao = observacao;
+        this.#chip = chip;
     }
 
-    get id()
-    {
+    get id() {
         return this.#id;
     }
 
-    set id(novoId)
-    {
-        this.#id=novoId;
+    set id(novoId) {
+        this.#id = novoId;
     }
-    get nome()
-    {
+
+    get nome() {
         return this.#nome;
     }
 
-    set nome(novoNome)
-    {
-        this.#nome=novoNome;
+    set nome(novoNome) {
+        this.#nome = novoNome;
     }
-    get raca()
-    {
+
+    get raca() {
         return this.#raca;
     }
 
-    set raca(novaRaca)
-    {
-        this.#raca=novaRaca;
+    set raca(novaRaca) {
+        this.#raca = novaRaca;
     }
-    get status()
-    {
+
+    get status() {
         return this.#status;
     }
 
-    set status(novoStatus)
-    {
-        this.#status=novoStatus;
+    set status(novoStatus) {
+        this.#status = novoStatus;
     }
-    get peso()
-    {
+
+    get peso() {
         return this.#peso;
     }
 
-    set peso(novoPeso)
-    {
-        this.#peso=novoPeso;
+    set peso(novoPeso) {
+        this.#peso = novoPeso;
     }
-    get porte()
-    {
+
+    get porte() {
         return this.#porte;
     }
 
-    set porte(novoPorte)
-    {
-        this.#porte=novoPorte;
+    set porte(novoPorte) {
+        this.#porte = novoPorte;
     }
-    get observacao()
-    {
+
+    get observacao() {
         return this.#observacao;
     }
 
-    set observacao(novaObs)
-    {
-        this.#observacao=novaObs;
+    set observacao(novaObs) {
+        this.#observacao = novaObs;
     }
-    get chip()
-    {
+
+    get chip() {
         return this.#chip;
     }
 
-    set chip(novoChip)
-    {
-        this.#chip=novoChip
+    set chip(novoChip) {
+        this.#chip = novoChip;
     }
 
-    validarAnimal(animal)
-    {
-        if(animal instanceof Animal)
-        {
-            if(animal.nome != "" && animal.raca != "")
-                return 1;       
-            return 0;
-        }
+    validarAnimal() {
+        return this.#nome.trim() !== "" && this.#raca.trim() !== "";
     }
 
-    validarIdAnimal(idAnimal)
-    {
-        if(idAnimal>0)
-            return 1;
-        return 0;
+    validarIdAnimal() {
+        return Number.isInteger(this.#id) && this.#id > 0;
     }
 
-    async incluir(conexao, animal)
-    {
+    async incluir(conexao) {
         const animalDAO = new AnimalDAO();
-        return await animalDAO.incluir(conexao, animalctrl);
+        return await animalDAO.incluir(conexao, this);
     }
 
-    async consultar(conexao, termo)
-    {
+    async consultar(conexao, termo = "") {
         const animalDAO = new AnimalDAO();
-        return await animalDAO.consultar(conexao, animalctrl);
+        return await animalDAO.consultar(conexao, termo);
     }
 
-    async deletar(conexao, animal)
-    {
+    async excluir(conexao) {
         const animalDAO = new AnimalDAO();
-        await animalDAO.deletar(conexao, animalctrl);
+        return await animalDAO.excluir(conexao, this);
     }
 
-    async alterar(conexao, animal)
-    {
+    async editar(conexao) {
         const animalDAO = new AnimalDAO();
-        await animalDAO.alterar(conexao, animalctrl);
+        return await animalDAO.editar(conexao, this);
     }
 }
