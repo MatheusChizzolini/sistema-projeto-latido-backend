@@ -5,7 +5,8 @@ import rotaProduto from "./routes/produto.routes.js";
 import rotaCategoria from "./routes/categoria.routes.js";
 import rotaUsuario from "./routes/usuario.routes.js";
 import rotaApoiador from "./routes/apoiador.routes.js";
-import rotaAnimal from "./routes/animal.routes.js"
+import rotaAnimal from "./routes/animal.routes.js";
+import rotaCategoria from "./routes/categoria.routes.js";
 //importa sua rota aqui
 
 const host = "0.0.0.0";
@@ -25,8 +26,8 @@ app.use('/produtos', rotaProduto);
 app.use('/usuarios', rotaUsuario);
 app.use('/apoiadores', rotaApoiador);
 app.use('/animal', rotaAnimal);
+app.use('/categorias', rotaCategoria);
 //app.use('/exemplo', rotaExemplo);
-
 
 app.listen(porta, host, () => {
     console.log(`Servidor escutando em http://${host}:${porta}`);
