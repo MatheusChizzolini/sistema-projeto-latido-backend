@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import rotaUsuario from "./routes/usuario.routes.js";
+import rotaApoiador from "./routes/apoiador.routes.js";
 //importa sua rota aqui
 
 const host = "0.0.0.0";
@@ -18,7 +18,7 @@ app.use(cors({
 }));
 
 
-app.use('/usuarios', rotaUsuario);
+app.use('/apoiadores', rotaApoiador);
 //app.use('/exemplo', rotaExemplo);
 
 

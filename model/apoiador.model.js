@@ -1,13 +1,15 @@
+import ApoiadorDAO from "../persistence/apoiador.persistence.js";
+
 export default class Apoiador {
-    #idAdotante;
+    #idApoiador;
     #cpf;
     #nome;
     #email;
     #endereco;
     #telefone;
 
-    constructor(idAdotante = 0, cpf = "", nome = "", email = "", endereco = "", telefone = ""){
-        this.#idAdotante = idAdotante;
+    constructor(idApoiador = 0, cpf = "", nome = "", email = "", endereco = "", telefone = "") {
+        this.#idApoiador = idApoiador;
         this.#cpf = cpf;
         this.#nome = nome;
         this.#email = email;
@@ -15,87 +17,52 @@ export default class Apoiador {
         this.#telefone = telefone;
     }
 
-    get idAdotante(){
-        return this.#idAdotante;
+    // Getters e Setters
+    get idApoiador() { return this.#idApoiador; }
+    set idApoiador(value) { this.#idApoiador = value; }
+
+    get cpf() { return this.#cpf; }
+    set cpf(novoCpf) { this.#cpf = novoCpf; }
+
+    get nome() { return this.#nome; }
+    set nome(novoNome) { this.#nome = novoNome; }
+
+    get email() { return this.#email; }
+    set email(novoEmail) { this.#email = novoEmail; }
+
+    get endereco() { return this.#endereco; }
+    set endereco(novoEndereco) { this.#endereco = novoEndereco; }
+
+    get telefone() { return this.#telefone; }
+    set telefone(novoTelefone) { this.#telefone = novoTelefone; }
+
+    // Métodos Assíncronos
+    async incluir(conexao) {
+        const apoiadorDAO = new ApoiadorDAO();
+        return await apoiadorDAO.incluir(conexao, this);
     }
 
-    set idAdotante(value){
-        this.#idAdotante = value;   
+    async editar(conexao) {
+        const apoiadorDAO = new ApoiadorDAO();
+        return await apoiadorDAO.editar(conexao, this);
     }
 
-    get cpf() {
-        return this.#cpf;
+    async excluir(conexao) {
+        const apoiadorDAO = new ApoiadorDAO();
+        return await apoiadorDAO.excluir(conexao, this);
     }
 
-    set cpf(novoCpf){
-        this.#cpf = novoCpf;
+    async consultar(conexao, termo) {
+        const apoiadorDAO = new ApoiadorDAO();
+        return await apoiadorDAO.consultar(conexao, termo);
     }
 
-    get nome() {
-        return this.#nome;
+    // Validações
+    validarApoiador() {
+        return this.#email !== "" && this.#cpf !== "";
     }
 
-    set nome(novoNome){
-        this.#nome = novoNome;
-    }
-
-    get email() {
-        return this.#email;
-    }
-
-    set email(novoEmail){
-        this.#email = novoEmail;
-    }
-
-    get endereco() {
-        return this.#endereco;
-    }
-
-    set endereco(novoEndereco){
-        this.#endereco = novoEndereco;
-    }
-
-    get telefone(){
-        return this.#telefone;
-    }
-
-    set telefone(novoTelefone){
-        this.#telefone = novoTelefone;
-    }
-
-    async incluir(conexao, apoiador){
-        const apoiadorPersist = new ApoiadorPersistence();
-        return await apoiadorPersist.incluir(conexao, apoiador);
-    }
-
-    async editar(conexao, apoiador){
-        const apoiadorPersist = new ApoiadorPersistence();
-        return await apoiadorPersist.editar(conexao, apoiador);
-    }
-
-    async excluir(conexao, apoiador){
-        const apoiadorPersist = new ApoiadorPersistence();
-        return await apoiadorPersist.excluir(conexao, apoiador);
-    }
-
-    async consultar(conexao, termo){
-        const apoiadorPersist = new ApoiadorPersistence();
-        return await apoiadorPersist.consultar(conexao, termo);
-    }
-
-    validarApoiador(apoiador) {
-        if (apoiador instanceof Apoiador) {
-            if (apoiador.email != "" && apoiador.cpf != "" && apoiador.idAdotante!= 0) {
-                return 1;
-            }
-            return 0;
-        }
-    }
-
-    validarIdAdotante(idAdotante){
-        if(idAdotante > 0){
-            return 1;
-        }
-        return 0;
+    validarIdApoiador() {
+        return this.#idApoiador > 0;
     }
 }

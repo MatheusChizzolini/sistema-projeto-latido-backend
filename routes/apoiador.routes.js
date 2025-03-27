@@ -1,14 +1,14 @@
 import { Router } from "express";
-import ApoiadorControl from "../model/apoiador.model";
+import ApoiadorControl from "../control/apoiador.control.js";
 
 const apoiadorControl = new ApoiadorControl();
 const rotaApoiador = Router();
 
 rotaApoiador.post("/", apoiadorControl.gravar);
-rotaApoiador.put("/:email", apoiadorControl.editar);
-rotaApoiador.patch("/:email", apoiadorControl.editar);
-rotaApoiador.delete("/:email", apoiadorControl.excluir);
-rotaApoiador.get("/:email", apoiadorControl.consultar);
+rotaApoiador.put("/:idApoiador", apoiadorControl.editar);
+rotaApoiador.patch("/:idApoiador", apoiadorControl.editar);
+rotaApoiador.delete("/:idApoiador", apoiadorControl.excluir);
+rotaApoiador.get("/:idApoiador", apoiadorControl.consultar);
 rotaApoiador.get("/", apoiadorControl.consultar);
 
 export default rotaApoiador;
