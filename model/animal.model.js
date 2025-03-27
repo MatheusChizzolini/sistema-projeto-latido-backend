@@ -1,5 +1,5 @@
 
-import AnimalDAO from "../persistence/animal.persistence";
+import AnimalDAO from "../persistence/animal.persistence.js";
 export default class Animal
 {
     #id;
