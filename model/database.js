@@ -10,6 +10,7 @@ class Database {
 
         this.pool = mysql.createPool({
             host: 'localhost',
+            port: 3306,
             user: 'root',
             password: '',
             database: 'svpldb',
@@ -23,6 +24,7 @@ class Database {
         if (!Database.#instance) {
             Database.#instance = new Database();
         }
+
         return Database.#instance;
     }
 
