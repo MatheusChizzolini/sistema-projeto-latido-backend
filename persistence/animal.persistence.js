@@ -41,7 +41,7 @@ export default class AnimalDAO{
             
             const database = await conectar();
             const sql = `
-                INSERT INTO animal(an_nome, an_raca, an_status, an_peso, an_porte, an_porte, an_obs, an_chip)
+                INSERT INTO animal(nome, raca, status, peso, porte, porte, obs, chip)
                 VALUES (?, ?, ?, ?, ?, ? ,?)
             `;
             const parametro =[
@@ -63,7 +63,7 @@ export default class AnimalDAO{
         if(animal instanceof Animal)
         {
             const sql=`UPDATE animal SET nome=?, raca=?, status=?, peso=?, porte=?, obeservacao=?, chip=?
-            WHERE an_id=?
+            WHERE id=?
             `;
             let parametro=[
                animal.nome,
