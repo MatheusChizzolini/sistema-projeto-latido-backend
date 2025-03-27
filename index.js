@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import rotaProduto from "./routes/produto.routes.js";
-import rotaCategoria from "./routes/categoria.routes.js";
 import rotaUsuario from "./routes/usuario.routes.js";
 import rotaApoiador from "./routes/apoiador.routes.js";
 import rotaAnimal from "./routes/animal.routes.js";
