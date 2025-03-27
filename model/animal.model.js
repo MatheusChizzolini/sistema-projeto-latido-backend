@@ -1,7 +1,6 @@
+import AnimalDAO from "../persistence/animal.persistence.js";
 
-import AnimalDAO from "../persistence/animal.persistence";
-export default class Animal
-{
+export default class Animal {
     #id;
     #nome;
     #raca;
@@ -11,126 +10,106 @@ export default class Animal
     #observacao;
     #chip;
 
-    constructor(id=0, nome="", raca="", status="", peso=0, porte="", observacao="", chip=0)
-    {
-        this.#id=id;
-        this.#nome=nome;
-        this.#raca=raca;
-        this.#status=status;
-        this.#peso=peso;
-        this.#porte=porte;
-        this.#observacao=observacao;
-        this.#chip=chip
+    constructor(id = 0, nome = "", raca = "", status = "", peso = 0, porte = "", observacao = "", chip = 0) {
+        this.#id = id;
+        this.#nome = nome;
+        this.#raca = raca;
+        this.#status = status;
+        this.#peso = peso;
+        this.#porte = porte;
+        this.#observacao = observacao;
+        this.#chip = chip;
     }
 
-    get id()
-    {
+    get id() {
         return this.#id;
     }
 
-    set id(value)
-    {
-        this.#id=value;
+    set id(novoId) {
+        this.#id = novoId;
     }
-    get nome()
-    {
+
+    get nome() {
         return this.#nome;
     }
 
-    set nome(value)
-    {
-        this.#nome=value;
+    set nome(novoNome) {
+        this.#nome = novoNome;
     }
-    get raca()
-    {
+
+    get raca() {
         return this.#raca;
     }
 
-    set raca(value)
-    {
-        this.#raca=value;
+    set raca(novaRaca) {
+        this.#raca = novaRaca;
     }
-    get status()
-    {
+
+    get status() {
         return this.#status;
     }
 
-    set status(value)
-    {
-        this.#status=value;
+    set status(novoStatus) {
+        this.#status = novoStatus;
     }
-    get peso()
-    {
+
+    get peso() {
         return this.#peso;
     }
 
-    set peso(value)
-    {
-        this.#peso=value;
+    set peso(novoPeso) {
+        this.#peso = novoPeso;
     }
-    get porte()
-    {
+
+    get porte() {
         return this.#porte;
     }
 
-    set porte(value)
-    {
-        this.#porte=value;
+    set porte(novoPorte) {
+        this.#porte = novoPorte;
     }
-    get observacao()
-    {
+
+    get observacao() {
         return this.#observacao;
     }
 
-    set observacao(value)
-    {
-        this.#observacao=value;
+    set observacao(novaObs) {
+        this.#observacao = novaObs;
     }
-    get chip()
-    {
+
+    get chip() {
         return this.#chip;
     }
 
-    set chip(value)
-    {
-        this.#chip=value
+    set chip(novoChip) {
+        this.#chip = novoChip;
     }
 
-    toJSON()
-    {
-        return{
-            "id": this.#id,
-            "nome": this.#nome,
-            "raca":this.#raca,
-            "status":this.#status,
-            "peso":this.#peso,
-            "porte":this.#porte,
-            "observacao":this.#observacao,
-            "chip": this.#chip
-        };
-    }
-    
-    async incluir()
-    {
-        const animalDAO = new AnimalDAO();
-        await animalDAO.incluir(this);
+    validarAnimal() {
+        return this.#nome.trim() !== "" && this.#raca.trim() !== "";
     }
 
-    async consultar()
-    {
-        const animalDAO = new AnimalDAO();
-        return await animalDAO.consultar(termo);
+    validarIdAnimal() {
+        return Number.isInteger(this.#id) && this.#id > 0;
     }
 
-    async deletar()
-    {
+    async incluir(conexao) {
         const animalDAO = new AnimalDAO();
-        await animalDAO.deletar(this);
+        return await animalDAO.incluir(conexao, this);
     }
 
-    async alterar()
-    {
+    async consultar(conexao, termo = "") {
         const animalDAO = new AnimalDAO();
-        await animalDAO.alterar(this);
+        return await animalDAO.consultar(conexao, termo);
+    }
+
+    async excluir(conexao) {
+        const animalDAO = new AnimalDAO();
+        return await animalDAO.excluir(conexao, this);
+    }
+
+    async editar(conexao) {
+        const animalDAO = new AnimalDAO();
+        return await animalDAO.editar(conexao, this);
     }
 }
