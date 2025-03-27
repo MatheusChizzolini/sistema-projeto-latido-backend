@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import rotaProduto from "./routes/produto.routes.js";
+import rotaCategoria from "./routes/categoria.routes.js";
 import rotaUsuario from "./routes/usuario.routes.js";
 //importa sua rota aqui
 
@@ -17,7 +19,7 @@ app.use(cors({
     "Access-Control-Allow-Origin":"*"
 }));
 
-
+app.use('/produtos', rotaProduto);
 app.use('/usuarios', rotaUsuario);
 //app.use('/exemplo', rotaExemplo);
 
