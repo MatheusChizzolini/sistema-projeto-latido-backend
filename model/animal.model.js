@@ -28,109 +28,112 @@ export default class Animal
         return this.#id;
     }
 
-    set id(value)
+    set id(novoId)
     {
-        this.#id=value;
+        this.#id=novoId;
     }
     get nome()
     {
         return this.#nome;
     }
 
-    set nome(value)
+    set nome(novoNome)
     {
-        this.#nome=value;
+        this.#nome=novoNome;
     }
     get raca()
     {
         return this.#raca;
     }
 
-    set raca(value)
+    set raca(novaRaca)
     {
-        this.#raca=value;
+        this.#raca=novaRaca;
     }
     get status()
     {
         return this.#status;
     }
 
-    set status(value)
+    set status(novoStatus)
     {
-        this.#status=value;
+        this.#status=novoStatus;
     }
     get peso()
     {
         return this.#peso;
     }
 
-    set peso(value)
+    set peso(novoPeso)
     {
-        this.#peso=value;
+        this.#peso=novoPeso;
     }
     get porte()
     {
         return this.#porte;
     }
 
-    set porte(value)
+    set porte(novoPorte)
     {
-        this.#porte=value;
+        this.#porte=novoPorte;
     }
     get observacao()
     {
         return this.#observacao;
     }
 
-    set observacao(value)
+    set observacao(novaObs)
     {
-        this.#observacao=value;
+        this.#observacao=novaObs;
     }
     get chip()
     {
         return this.#chip;
     }
 
-    set chip(value)
+    set chip(novoChip)
     {
-        this.#chip=value
+        this.#chip=novoChip
     }
 
-    toJSON()
+    validarAnimal(animal)
     {
-        return{
-            "id": this.#id,
-            "nome": this.#nome,
-            "raca":this.#raca,
-            "status":this.#status,
-            "peso":this.#peso,
-            "porte":this.#porte,
-            "observacao":this.#observacao,
-            "chip": this.#chip
-        };
-    }
-    
-    async incluir()
-    {
-        const animalDAO = new AnimalDAO();
-        await animalDAO.incluir(this);
+        if(animal instanceof Animal)
+        {
+            if(animal.nome != "" && animal.raca != "")
+                return 1;       
+            return 0;
+        }
     }
 
-    async consultar()
+    validarIdAnimal(idAnimal)
     {
-        const animalDAO = new AnimalDAO();
-        return await animalDAO.consultar(termo);
+        if(idAnimal>0)
+            return 1;
+        return 0;
     }
 
-    async deletar()
+    async incluir(conexao, animal)
     {
         const animalDAO = new AnimalDAO();
-        await animalDAO.deletar(this);
+        return await animalDAO.incluir(conexao, animalctrl);
     }
 
-    async alterar()
+    async consultar(conexao, termo)
     {
         const animalDAO = new AnimalDAO();
-        await animalDAO.alterar(this);
+        return await animalDAO.consultar(conexao, animalctrl);
+    }
+
+    async deletar(conexao, animal)
+    {
+        const animalDAO = new AnimalDAO();
+        await animalDAO.deletar(conexao, animalctrl);
+    }
+
+    async alterar(conexao, animal)
+    {
+        const animalDAO = new AnimalDAO();
+        await animalDAO.alterar(conexao, animalctrl);
     }
 }

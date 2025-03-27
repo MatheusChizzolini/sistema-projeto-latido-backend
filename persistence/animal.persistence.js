@@ -1,4 +1,5 @@
 import Animal from "../model/animal.model.js";
+import Database from "../model/database.js";
 
 export default class AnimalDAO{
 
@@ -9,7 +10,7 @@ export default class AnimalDAO{
     async init()
     {
         try{
-            const conexao = await conectar();
+            const conexao = await Database.getInstance().getConnection();
             const sql=`
                 CREATE TABLE IF NOT EXISTS Animal(
                 id INT NOT NULL,
@@ -53,7 +54,7 @@ export default class AnimalDAO{
                animal.observacao,
                animal.chip
             ];
-            const resultado = await database.execute(sql, parametro);
+            const resultado = await conexao.execute(sql, parametro);
             animal.id = resultado[0].insertId;
             await conexao.release();
         }
@@ -91,18 +92,39 @@ export default class AnimalDAO{
         }
     }
 
-    async consultar(animal){
+    async consultar(conexao, termo){
         let sql="";
         let parametro = [];
 
-        if(termo)
+        if(isNaN(parseInt(termo)))
         {
-            sql=`SELECT * FROM animal 
-                 WHERE nome =?`;
+            sql=`SELECT * FROM animal a
+                 WHERE a.nome =?`;
             parametro = ['%' + termo + '%']
         }
-        const [database, campos] = await conexao.execute(sql, parametro);
-        await conexao.release();
-        return database;
+        else
+        {
+            sql = `SELECT * FROM animal a
+                   WHERE a.id=?`;
+            parametro = [termo];
+        }
+        const[linhas, campos] = await conexao.execute(sql, parametro);
+        let listaAnimal = [];
+        for(const linha of linhas){
+
+            const animal = {
+                codigo: linha.id,
+                nome: linha.nome,
+                raca: linha.raca,
+                status: linha.status,
+                peso: linha.peso,
+                porte: linha.porte,
+                observacao: linha.observacao,
+                chip: linha.chip
+            };
+            listaAnimal.push(animal);
+        }
+        conexao.release();
+        return listaAnimal;
     }
 }
