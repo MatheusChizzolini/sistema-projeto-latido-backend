@@ -97,7 +97,6 @@ export default class ProdutoPersistence {
         let listaProdutos = [];
     
         for (const linha of linhas) {
-    
             const categoria = linha.idCategoria 
                 ? { idCategoria: linha.idCategoria, nomeCategoria: linha.nomeCategoria }
                 : null;

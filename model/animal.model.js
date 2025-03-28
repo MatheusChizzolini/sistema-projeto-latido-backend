@@ -85,31 +85,39 @@ export default class Animal {
         this.#chip = novoChip;
     }
 
-    validarAnimal() {
-        return this.#nome.trim() !== "" && this.#raca.trim() !== "";
+    validarAnimal(animal) {
+        if(animal instanceof Animal){
+            if(animal.nome !== "" && animal.raca !== "" && animal.status !== "" && animal.peso > 0 && animal.porte !== "" && animal.observacao !== "" && animal.chip !== ""){
+                return 1;
+            }
+            return 0;
+        }
     }
 
-    validarIdAnimal() {
-        return Number.isInteger(this.#id) && this.#id > 0;
+    validarIdAnimal(id) {
+        if(id > 0){
+            return 1;
+        }
+        return 0;
     }
 
-    async incluir(conexao) {
+    async incluir(conexao, animal) {
         const animalDAO = new AnimalDAO();
-        return await animalDAO.incluir(conexao, this);
+        return await animalDAO.incluir(conexao, animal);
     }
 
-    async consultar(conexao, termo = "") {
+    async consultar(conexao, termo) {
         const animalDAO = new AnimalDAO();
         return await animalDAO.consultar(conexao, termo);
     }
 
-    async excluir(conexao) {
+    async excluir(conexao, animal) {
         const animalDAO = new AnimalDAO();
-        return await animalDAO.excluir(conexao, this);
+        return await animalDAO.excluir(conexao, animal);
     }
 
-    async editar(conexao) {
+    async editar(conexao, animal) {
         const animalDAO = new AnimalDAO();
-        return await animalDAO.editar(conexao, this);
+        return await animalDAO.editar(conexao, animal);
     }
 }

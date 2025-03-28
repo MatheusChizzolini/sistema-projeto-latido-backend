@@ -83,7 +83,7 @@ export default class ApoiadorDAO {
             sql += ` WHERE idApoiador LIKE ?`;
             parametros = [termo];
         }
-    
+        
         const [dataBase, campos] = await conexao.execute(sql, parametros);
         await conexao.release();
         return dataBase;

@@ -30,10 +30,6 @@ export default class AnimalDAO {
 
     async incluir(conexao, animal) {
         if (animal instanceof Animal) {
-            if (!animal.nome || !animal.raca) {
-                throw new Error("Todos os campos devem ser preenchidos!");
-            }
-
             const sql = `
                 INSERT INTO Animal (nome, raca, status, peso, porte, observacao, chip)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -47,12 +43,13 @@ export default class AnimalDAO {
                 animal.observacao,
                 animal.chip
             ];
-            const [resultado] = await conexao.execute(sql, parametros);
-            animal.id = resultado.insertId;
+            const resultado = await conexao.execute(sql, parametros);
+            animal.id = resultado[0].insertId;
+            await conexao.release();
         }
     }
 
-    async alterar(conexao, animal) {
+    async editar(conexao, animal) {
         if (animal instanceof Animal) {
             const sql = `
                 UPDATE Animal 
@@ -70,39 +67,36 @@ export default class AnimalDAO {
                 animal.id
             ];
             await conexao.execute(sql, parametros);
+            await conexao.release();
         }
     }
 
-    async deletar(conexao, animal) {
+    async excluir(conexao, animal) {
         if (animal instanceof Animal) {
             const sql = `DELETE FROM Animal WHERE id = ?`;
-            const parametros = [animal.id];
+            let parametros = [animal.id];
             await conexao.execute(sql, parametros);
+            await conexao.release();
         }
     }
 
     async consultar(conexao, termo) {
-        let sql = "";
+        let sql = "SELECT * FROM animal";
         let parametros = [];
-
-        if (isNaN(parseInt(termo))) {
-            sql = `SELECT * FROM Animal WHERE nome LIKE ?`;
-            parametros = [`%${termo}%`];
-        } else {
-            sql = `SELECT * FROM Animal WHERE id = ?`;
-            parametros = [termo];
+    
+        if (termo) {
+            const id = parseInt(termo);
+            if (!isNaN(id)) {
+                sql += ` WHERE id = ?`;
+                parametros = [id];
+            } else {
+                sql += ` WHERE nome LIKE ?`;
+                parametros = [`%${termo}%`];
+            }
         }
-
-        const [linhas] = await conexao.execute(sql, parametros);
-        return linhas.map(linha => ({
-            id: linha.id,
-            nome: linha.nome,
-            raca: linha.raca,
-            status: linha.status,
-            peso: linha.peso,
-            porte: linha.porte,
-            observacao: linha.observacao,
-            chip: linha.chip
-        }));
+    
+        const [dataBase, campos] = await conexao.execute(sql, parametros);
+        await conexao.release();
+        return dataBase;
     }
 }

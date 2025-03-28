@@ -5,13 +5,13 @@ export default class AnimalControl {
     async incluir(requisicao, resposta) {
         resposta.type("application/json");
         if (requisicao.method === "POST" && requisicao.is("application/json")) {
-            const nomeAnimal = requisicao.body.nomeAnimal;
-            const animal = new Animal(0, nomeAnimal);
+            const  { nome, raca, status, peso, porte, observacao, chip } = requisicao.body;
+            const animal = new Animal(0, nome, raca, status, peso, porte, observacao, chip);
+            
             const conexao = await Database.getInstance().getConnection();
-
             try {
-                if (animal.validarAnimal()) {
-                    await animal.incluir(conexao);
+                if (animal.validarAnimal(animal)) {
+                    await animal.incluir(conexao, animal);
                     resposta.status(200).json({
                         status: true,
                         mensagem: "Animal adicionado com sucesso!"
@@ -34,14 +34,14 @@ export default class AnimalControl {
     async editar(requisicao, resposta) {
         resposta.type("application/json");
         if ((requisicao.method === "PUT" || requisicao.method === "PATCH") && requisicao.is("application/json")) {
-            const idAnimal = parseInt(requisicao.params.idAnimal);
-            const nomeAnimal = requisicao.body.nomeAnimal;
-            const animal = new Animal(idAnimal, nomeAnimal);
+            const id = requisicao.params.id;
+            const  { nome, raca, status, peso, porte, observacao, chip } = requisicao.body;
+            const animal = new Animal(id, nome, raca, status, peso, porte, observacao, chip);
+            
             const conexao = await Database.getInstance().getConnection();
-
             try {
-                if (animal.validarAnimal()) {
-                    await animal.editar(conexao);
+                if (animal.validarAnimal(animal)) {
+                    await animal.editar(conexao, animal);
                     resposta.status(200).json({
                         status: true,
                         mensagem: "Animal editado com sucesso!"
@@ -69,13 +69,14 @@ export default class AnimalControl {
     async deletar(requisicao, resposta) {
         resposta.type("application/json");
         if (requisicao.method === "DELETE") {
-            const idAnimal = parseInt(requisicao.params.idAnimal);
-            const animal = new Animal(idAnimal);
+            const id = requisicao.params.id;
+            const animal = new Animal(id);
+            
             const conexao = await Database.getInstance().getConnection();
 
             try {
-                if (animal.validarId()) {
-                    await animal.excluir(conexao);
+                if (animal.validarIdAnimal(animal.id)) {
+                    await animal.excluir(conexao, animal);
                     resposta.status(200).json({
                         status: true,
                         mensagem: "Animal excluído com sucesso!"
@@ -103,13 +104,29 @@ export default class AnimalControl {
     async consultar(requisicao, resposta) {
         resposta.type("application/json");
         if (requisicao.method === "GET") {
-            let idAnimal = parseInt(requisicao.params.idAnimal) || null;
+            let id = requisicao.params.id;
+            if (isNaN(id)) {
+                id = "";
+            }
+
             const animal = new Animal();
             const conexao = await Database.getInstance().getConnection();
 
             try {
-                const listaAnimal = await animal.consultar(conexao, idAnimal);
-                resposta.status(200).json(listaAnimal);
+                animal.consultar(conexao, id)
+                .then((listaAnimais) => {
+                    resposta.status(200).json(
+                        listaAnimais
+                    );
+                })
+                .catch((erro) => {
+                    resposta.status(500).json(
+                        {
+                            "status": false,
+                            "mensagem": "Erro ao consultar animais: " + erro.message
+                        }
+                    );
+                });
             } catch (erro) {
                 resposta.status(500).json({
                     status: false,
