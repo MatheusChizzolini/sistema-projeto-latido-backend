@@ -102,7 +102,7 @@ export default class ProdutoPersistence {
                 : null;
     
             const produto = {
-                codigo: linha.idProduto,
+                idProduto: linha.idProduto,
                 descricao: linha.descricao,
                 marca: linha.marca,
                 quantidade: linha.quantidade,
