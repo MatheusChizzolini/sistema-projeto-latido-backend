@@ -73,10 +73,10 @@ export default class UsuarioPersistence {
 
         if (termo) {
             sql += ` WHERE email LIKE ?`;
-            parametros = [termo];
+            parametros = ['%' + termo + '%'];
         }
 
-        const [dataBase, campos] = await conexao.execute(sql, parametros);
+        const [dataBase] = await conexao.execute(sql, parametros);
         await conexao.release();
         return dataBase;
     }

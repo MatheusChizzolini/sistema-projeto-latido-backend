@@ -141,12 +141,12 @@ export default class UsuarioControl {
     async consultar(requisicao, resposta) {
         resposta.type("application/json");
         if (requisicao.method == "GET") {
-            let email = requisicao.params.email;
-
+            let email = requisicao.query.email;
+    
             if (!email) {
                 email = "";
             }
-
+    
             const usuario = new Usuario();
             const conexao = await Database.getInstance().getConnection();
             try{
