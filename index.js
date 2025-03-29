@@ -25,7 +25,7 @@ app.use('/produtos', rotaProduto);
 app.use('/usuarios', rotaUsuario);
 app.use('/apoiadores', rotaApoiador);
 app.use('/animal', rotaAnimal);
-app.use('/categorias', rotaCategoria);
+app.use('/categoria', rotaCategoria);
 //app.use('/exemplo', rotaExemplo);
 
 app.listen(porta, host, () => {

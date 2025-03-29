@@ -1,5 +1,5 @@
 import Categoria from "../model/categoria.model.js";
-
+import Database from "../model/database.js";
 export default class CategoriaPersistence {
 
 
@@ -7,8 +7,8 @@ export default class CategoriaPersistence {
         this.init();
     }
 
-    async init(){
-        try{
+    async init() {
+        try {
             const conexao = await Database.getInstance().getConnection();
             const sql = `
                 CREATE TABLE IF NOT EXISTS categoria(
@@ -19,10 +19,8 @@ export default class CategoriaPersistence {
             `;
             await conexao.execute(sql);
             await conexao.release();
-
-        }
-        catch(erro){
-            console.log("Erro ao iniciar a tabela categoria!");
+        } catch (erro) {
+            console.error("Erro ao iniciar a tabela categoria:", erro); // Registra o erro completo
         }
     }
 
