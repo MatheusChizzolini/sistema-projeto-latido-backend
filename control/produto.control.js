@@ -152,15 +152,12 @@ export default class ProdutoControl {
     async consultar(requisicao, resposta) {
         resposta.type("application/json");
         if (requisicao.method == "GET") {
-            let idProduto = requisicao.params.idProduto;
-            if (isNaN(idProduto)) {
-                idProduto = "";
-            }
+            const termo = requisicao.query.search;
 
             const produto = new Produto();
             const conexao = await Database.getInstance().getConnection();
             try {
-                produto.consultar(conexao, idProduto)
+                produto.consultar(conexao, termo)
                     .then((listaProdutos) => {
                         resposta.status(200).json(
                             listaProdutos

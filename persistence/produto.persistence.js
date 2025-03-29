@@ -74,33 +74,36 @@ export default class ProdutoPersistence {
             await conexao.release();
         }
     }
-
+    
     async consultar(conexao, termo) {
         let sql = "";
         let parametros = [];
-    
-        if (isNaN(parseInt(termo))) {   
-            sql = `SELECT p.*, c.idCategoria, c.nomeCategoria
-                   FROM produto p
-                   LEFT JOIN categoria c ON p.idCategoria = c.idCategoria
-                   WHERE p.descricao LIKE ?`;
-            parametros = ['%' + termo + '%'];
+
+        if (termo) {
+            sql = `
+                SELECT p.*, c.idCategoria, c.nomeCategoria
+                FROM produto p
+                LEFT JOIN categoria c ON p.idCategoria = c.idCategoria
+                WHERE p.descricao LIKE ? OR c.nomeCategoria LIKE ?
+            `;
+            parametros = ['%' + termo + '%', '%' + termo + '%'];
         } else {
-            sql = `SELECT p.*, c.idCategoria, c.nomeCategoria 
-                   FROM produto p
-                   LEFT JOIN categoria c ON p.idCategoria = c.idCategoria
-                   WHERE p.idProduto = ?`;
-            parametros = [termo];
+            sql = `
+                SELECT p.*, c.idCategoria, c.nomeCategoria
+                FROM produto p
+                LEFT JOIN categoria c ON p.idCategoria = c.idCategoria
+            `;
+            parametros = [];
         }
-    
+
         const [linhas, campos] = await conexao.execute(sql, parametros);
         let listaProdutos = [];
-    
+
         for (const linha of linhas) {
-            const categoria = linha.idCategoria 
+            const categoria = linha.idCategoria
                 ? { idCategoria: linha.idCategoria, nomeCategoria: linha.nomeCategoria }
                 : null;
-    
+
             const produto = {
                 idProduto: linha.idProduto,
                 descricao: linha.descricao,
@@ -108,14 +111,12 @@ export default class ProdutoPersistence {
                 quantidade: linha.quantidade,
                 categoria
             };
-    
+
             listaProdutos.push(produto);
         }
-    
+
         conexao.release();
         return listaProdutos;
-    }
-    
-    
+    }    
     
 }
