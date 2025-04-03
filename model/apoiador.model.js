@@ -44,7 +44,7 @@ export default class Apoiador {
 
     async editar(conexao) {
         const apoiadorDAO = new ApoiadorDAO();
-        return await apoiadorDAO.editar(conexao, this);
+        return await apoiadorDAO.alterar(conexao, this);
     }
 
     async excluir(conexao) {
