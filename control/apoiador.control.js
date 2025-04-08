@@ -112,16 +112,18 @@ export default class ApoiadorControl {
         resposta.type("application/json");
 
         if (requisicao.method === "GET") {
-            let idApoiador = requisicao.params.idApoiador;
-
-            if (isNaN(idApoiador)) {
-                idApoiador = ""; // Permitir busca geral caso idApoiador seja inválido
+            let cpf = requisicao.params.cpf;
+            if (!cpf){
+                cpf = requisicao.query.cpf;
+            }
+            if (cpf) {
+                cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
             }
 
             const conexao = await Database.getInstance().getConnection();
 
             try {
-                const listaApoiadores = await new Apoiador().consultar(conexao, idApoiador);
+                const listaApoiadores = await new Apoiador().consultar(conexao, cpf);
                 resposta.status(200).json(listaApoiadores);
             } catch (erro) {
                 resposta.status(500).json({

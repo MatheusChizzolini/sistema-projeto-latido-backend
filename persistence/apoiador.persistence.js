@@ -46,15 +46,14 @@ export default class ApoiadorDAO {
 
     async alterar(conexao, apoiador) {
         if (apoiador instanceof Apoiador) {
-            const sql = `UPDATE apoiador SET cpf = ?, nome = ?, email = ?, endereco = ?, telefone = ? WHERE idApoiador = ?`;
+            const sql = `UPDATE apoiador SET  nome = ?, email = ?, endereco = ?, telefone = ? WHERE cpf = ?`;
 
             let parametros = [
-                apoiador.cpf,
                 apoiador.nome,
                 apoiador.email,
                 apoiador.endereco,
                 apoiador.telefone,
-                apoiador.idApoiador
+                apoiador.cpf
             ];
 
             await conexao.execute(sql, parametros);
@@ -77,13 +76,12 @@ export default class ApoiadorDAO {
 
     async consultar(conexao, termo) {
         let sql = "SELECT * FROM apoiador";
-        let parametros = [];
-    
-        if (termo) {
-            sql += ` WHERE idApoiador LIKE ?`;
-            parametros = [termo];
+        let parametros = [];    
+        if(termo){
+            sql += ` WHERE cpf LIKE ?`;
+            termo = [`%${termo}%`];
+            parametros = termo;
         }
-    
         const [dataBase, campos] = await conexao.execute(sql, parametros);
         await conexao.release();
         return dataBase;

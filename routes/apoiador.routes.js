@@ -8,7 +8,7 @@ rotaApoiador.post("/", apoiadorControl.gravar);
 rotaApoiador.put("/:idApoiador", apoiadorControl.editar);
 rotaApoiador.patch("/:idApoiador", apoiadorControl.editar);
 rotaApoiador.delete("/:idApoiador", apoiadorControl.excluir);
-rotaApoiador.get("/:idApoiador", apoiadorControl.consultar);
+rotaApoiador.get("/:cpf", apoiadorControl.consultar);
 rotaApoiador.get("/", apoiadorControl.consultar);
 
 export default rotaApoiador;

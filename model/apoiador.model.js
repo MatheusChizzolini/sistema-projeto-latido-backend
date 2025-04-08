@@ -65,4 +65,9 @@ export default class Apoiador {
     validarIdApoiador() {
         return this.#idApoiador > 0;
     }
+    
+    validarCpf() {
+        return this.#cpf.length === 11 && !isNaN(this.#cpf);
+    }
+    
 }
