@@ -32,7 +32,7 @@ export default class ApoiadorDAO {
             const sql = `INSERT INTO apoiador(cpf, nome, email, endereco, telefone) VALUES (?, ?, ?, ?, ?)`;
 
             let parametros = [
-                apoiador.cpf,
+                apoiador.cpf.replace(/[^\d]+/g, ""),
                 apoiador.nome,
                 apoiador.email,
                 apoiador.endereco,
@@ -53,7 +53,7 @@ export default class ApoiadorDAO {
                 apoiador.email,
                 apoiador.endereco,
                 apoiador.telefone,
-                apoiador.cpf
+                apoiador.cpf.replace(/[^\d]+/g, "")
             ];
 
             await conexao.execute(sql, parametros);
@@ -78,6 +78,7 @@ export default class ApoiadorDAO {
         let sql = "SELECT * FROM apoiador";
         let parametros = [];    
         if(termo){
+            termo = termo.replace(/[^\d]+/g, "");
             sql += ` WHERE cpf LIKE ?`;
             termo = [`%${termo}%`];
             parametros = termo;

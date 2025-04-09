@@ -110,18 +110,16 @@ export default class ApoiadorControl {
 
     async consultar(requisicao, resposta) {
         resposta.type("application/json");
-
+    
         if (requisicao.method === "GET") {
-            let cpf = requisicao.params.cpf;
-            if (!cpf){
-                cpf = requisicao.query.cpf;
-            }
+            let cpf = requisicao.query.cpf || requisicao.params.cpf || "";
+    
             if (cpf) {
-                cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+                cpf = cpf.replace(/\D/g, ''); // Remove tudo que não for número
             }
-
+    
             const conexao = await Database.getInstance().getConnection();
-
+    
             try {
                 const listaApoiadores = await new Apoiador().consultar(conexao, cpf);
                 resposta.status(200).json(listaApoiadores);
@@ -137,5 +135,5 @@ export default class ApoiadorControl {
                 "mensagem": "Requisição inválida! Consulte a documentação da API."
             });
         }
-    }
+    }    
 }
