@@ -17,7 +17,6 @@ export default class Apoiador {
         this.#telefone = telefone;
     }
 
-    // Getters e Setters
     get idApoiador() { return this.#idApoiador; }
     set idApoiador(value) { this.#idApoiador = value; }
 
@@ -36,7 +35,7 @@ export default class Apoiador {
     get telefone() { return this.#telefone; }
     set telefone(novoTelefone) { this.#telefone = novoTelefone; }
 
-    // Métodos Assíncronos
+    
     async incluir(conexao) {
         const apoiadorDAO = new ApoiadorDAO();
         return await apoiadorDAO.incluir(conexao, this);
@@ -67,7 +66,10 @@ export default class Apoiador {
     }
     
     validarCpf() {
-        return this.#cpf.length === 11 && !isNaN(this.#cpf);
+        const cpf = this.#cpf;
+        const regex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+        const limpo = /^\d{11}$/;
+        return regex.test(cpf) || limpo.test(cpf);
     }
     
 }
