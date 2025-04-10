@@ -11,7 +11,16 @@ export default class ApoiadorControl {
             const conexao = await Database.getInstance().getConnection();
 
             try {
-                if (apoiador.validarApoiador()) { // Removido o argumento desnecessário
+                if(apoiador.validarCpf()){
+                    const listaApoiadores = await new Apoiador().consultar(conexao, cpf);
+                    if (listaApoiadores.length > 0) {
+                        return resposta.status(400).json({
+                            "status": false,
+                            "mensagem": "Já existe um apoiador cadastrado com esse CPF!"
+                        });
+                    }
+                }
+                if (apoiador.validarApoiador() && apoiador.validarCpf()) {
                     await apoiador.incluir(conexao, apoiador);
                     resposta.status(200).json({
                         "status": true,
@@ -47,7 +56,7 @@ export default class ApoiadorControl {
             const conexao = await Database.getInstance().getConnection();
 
             try {
-                if (apoiador.validarApoiador()) { // Removido argumento repetido
+                if (apoiador.validarApoiador()) {
                     await apoiador.editar(conexao, apoiador);
                     resposta.status(200).json({
                         "status": true,
@@ -110,18 +119,18 @@ export default class ApoiadorControl {
 
     async consultar(requisicao, resposta) {
         resposta.type("application/json");
-
+    
         if (requisicao.method === "GET") {
-            let idApoiador = requisicao.params.idApoiador;
-
-            if (isNaN(idApoiador)) {
-                idApoiador = ""; // Permitir busca geral caso idApoiador seja inválido
+            let cpf = requisicao.query.cpf || requisicao.params.cpf || "";
+    
+            if (cpf) {
+                cpf = cpf.replace(/\D/g, ''); // Remove tudo que não for número
             }
-
+    
             const conexao = await Database.getInstance().getConnection();
-
+    
             try {
-                const listaApoiadores = await new Apoiador().consultar(conexao, idApoiador);
+                const listaApoiadores = await new Apoiador().consultar(conexao, cpf);
                 resposta.status(200).json(listaApoiadores);
             } catch (erro) {
                 resposta.status(500).json({
@@ -135,5 +144,5 @@ export default class ApoiadorControl {
                 "mensagem": "Requisição inválida! Consulte a documentação da API."
             });
         }
-    }
+    }    
 }
