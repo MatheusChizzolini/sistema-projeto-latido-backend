@@ -3,12 +3,18 @@ import UsuarioPersistence from "../persistence/usuario.persistence.js";
 export default class Usuario {
     #email;
     #senha;
+    #senhaConfirmada;
     #privilegio;
+    #nome;
+    #telefone;
 
-    constructor(email = "", senha = "", privilegio = "") {
+    constructor(email = "", senha = "", senhaConfirmada = "", privilegio = "", nome = "", telefone = "") {
         this.#email = email;
         this.#senha = senha;
+        this.#senhaConfirmada = senhaConfirmada;
         this.#privilegio = privilegio;
+        this.#nome = nome;
+        this.#telefone = telefone;
     }
 
     get email() {
@@ -19,8 +25,20 @@ export default class Usuario {
         return this.#senha;
     }
 
+    get senhaConfirmada() {
+        return this.#senhaConfirmada;
+    }
+
     get privilegio() {
         return this.#privilegio;
+    }
+
+    get nome() {
+        return this.#nome;
+    }
+
+    get telefone() {
+        return this.#telefone;
     }
 
     set email(novoEmail) {
@@ -31,13 +49,25 @@ export default class Usuario {
         this.#senha = novaSenha;
     }
 
+    set senhaConfirmada(novaSenhaConfirmada) {
+        this.#senhaConfirmada = novaSenhaConfirmada;
+    }
+
     set privilegio(novoPrivilegio) {
         this.#privilegio = novoPrivilegio;
     }
 
+    set nome(novoNome) {
+        this.#nome = novoNome;
+    }
+
+    set telefone(novoTelefone) {
+        this.#telefone = novoTelefone;
+    }
+
     validarUsuario(usuario) {
         if (usuario instanceof Usuario) {
-            if (usuario.email != "" && usuario.senha != "" && usuario.privilegio != "") {
+            if (usuario.email != "" && usuario.senha != "" && usuario.senhaConfirmada != "" && usuario.privilegio != "" && usuario.nome  != "" && usuario.telefone != "") {
                 return 1;
             }
 

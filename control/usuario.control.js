@@ -7,9 +7,12 @@ export default class UsuarioControl {
         if (requisicao.method == 'POST' && requisicao.is("application/json")) {
             const email = requisicao.body.email;
             const senha = requisicao.body.senha;
+            const senhaConfirmada = requisicao.body.senha_confirmada;
             const privilegio = requisicao.body.privilegio;
+            const nome = requisicao.body.nome;
+            const telefone = requisicao.body.telefone;
 
-            const usuario = new Usuario(email, senha, privilegio);
+            const usuario = new Usuario(email, senha, senhaConfirmada, privilegio, nome, telefone);
 
             const conexao = await Database.getInstance().getConnection();
             try {
@@ -49,9 +52,13 @@ export default class UsuarioControl {
         if ((requisicao.method == 'PUT' || requisicao.method == 'PATCH') && requisicao.is("application/json")) {
             const email = requisicao.body.email;
             const senha = requisicao.body.senha;
+            const senhaConfirmada = requisicao.body.senha_confirmada;
             const privilegio = requisicao.body.privilegio;
+            const nome = requisicao.body.nome;
+            const telefone = requisicao.body.telefone;
 
-            const usuario = new Usuario(email, senha, privilegio);
+            const usuario = new Usuario(email, senha, senhaConfirmada, privilegio, nome, telefone);
+            
             const conexao = await Database.getInstance().getConnection();
             try{
                 if (usuario.validarUsuario(usuario)) {
