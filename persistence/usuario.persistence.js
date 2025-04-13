@@ -10,9 +10,12 @@ export default class UsuarioPersistence {
             const conexao = await Database.getInstance().getConnection();
             const sql = `
                 CREATE TABLE IF NOT EXISTS usuario (
-                    email VARCHAR(45) NOT NULL,
-                    senha VARCHAR(45) NOT NULL,
+                    email VARCHAR(40) NOT NULL,
+                    senha VARCHAR(30) NOT NULL,
+                    senha_confirmada VARCHAR(30) NOT NULL,
                     privilegio CHAR(1) NOT NULL,
+                    nome VARCHAR(45) NOT NULL,
+                    telefone VARCHAR(15) NOT NULL,
                     CONSTRAINT PK_USU PRIMARY KEY (email)
                 )
             `;
@@ -26,12 +29,15 @@ export default class UsuarioPersistence {
 
     async incluir(conexao, usuario) {
         if (usuario instanceof Usuario) {
-            const sql = `INSERT INTO usuario(email, senha, privilegio) values (?, ?, ?)`;
+            const sql = `INSERT INTO usuario(email, senha, senha_confirmada, privilegio, nome, telefone) values (?, ?, ?, ?, ?, ?)`;
 
             let parametros = [
                 usuario.email,
                 usuario.senha,
-                usuario.privilegio
+                usuario.senhaConfirmada,
+                usuario.privilegio,
+                usuario.nome,
+                usuario.telefone
             ];
 
             await conexao.execute(sql, parametros);
@@ -41,11 +47,14 @@ export default class UsuarioPersistence {
 
     async alterar(conexao, usuario) {
         if (usuario instanceof Usuario) {
-            const sql = `UPDATE usuario SET senha = ?, privilegio = ? WHERE email = ?`;
+            const sql = `UPDATE usuario SET senha = ?, senha_confirmada = ?, privilegio = ?, nome = ?, telefone = ? WHERE email = ?`;
 
             let parametros = [
                 usuario.senha,
+                usuario.senhaConfirmada,
                 usuario.privilegio,
+                usuario.nome,
+                usuario.telefone,
                 usuario.email
             ];
 
