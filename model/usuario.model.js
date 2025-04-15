@@ -104,4 +104,14 @@ export default class Usuario {
         const usuarioPersist = new UsuarioPersistence();
         return await usuarioPersist.consultar(conexao, termo);
     }
+
+    async contaAdm(conexao) {
+        const usuarioPersist = new UsuarioPersistence();
+        return await usuarioPersist.contaAdm(conexao);
+    }
+
+    async login(conexao, termo) {
+        const usuarioPersist = new UsuarioPersistence();
+        return await usuarioPersist.login(conexao, termo);
+    }
 }

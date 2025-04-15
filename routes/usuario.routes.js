@@ -10,5 +10,6 @@ rotaUsuario.patch("/:email", usuarioControl.editar);
 rotaUsuario.delete("/:email", usuarioControl.excluir);
 rotaUsuario.get("/:email", usuarioControl.consultar);
 rotaUsuario.get("/", usuarioControl.consultar);
+rotaUsuario.post("/login", usuarioControl.login);
 
 export default rotaUsuario;
