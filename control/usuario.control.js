@@ -106,8 +106,15 @@ export default class UsuarioControl {
             const usuario = new Usuario(email);
             const conexao = await Database.getInstance().getConnection();
             try{
-                if (usuario.validarEmail(usuario)) {                
-                    usuario.excluir(conexao, usuario)
+                if (usuario.validarEmail(usuario)) {
+                    const totalAdministradores = await usuario.contaAdm(conexao);
+                    if (totalAdministradores === 1) {
+                        resposta.status(400).json({
+                            "status": false,
+                            "mensagem": "Não é possível excluir o último administrador."
+                        });
+                    } else {
+                        usuario.excluir(conexao, usuario)
                         .then(() => {
                             resposta.status(200).json({
                                 "status": true,
@@ -120,6 +127,7 @@ export default class UsuarioControl {
                                 "mensagem": "Não foi possível excluir o usuário: " + erro.message
                             });
                         });
+                    }
                 }
                 else {
                     resposta.status(400).json(
@@ -189,5 +197,31 @@ export default class UsuarioControl {
                 }
             );
         }
+    }
+
+    async login(requisicao, resposta) {
+        resposta.type("application/json");
+        
+        if (requisicao.method == "POST") {
+            const {email, senha} = requisicao.body;
+
+            if (email && senha) {
+                const usuario = new Usuario(email, senha, "", "", "", "");
+                const conexao = await Database.getInstance().getConnection();
+                usuario.login(conexao, email)
+                .then((respostaDB) => {
+                    if (respostaDB && respostaDB.senha == senha)
+                        resposta.status(200).json({ "status": true, "privilegio": respostaDB.privilegio });
+                    else
+                        resposta.status(400).json({ "status": false, "mensagem": "Usuário ou senha incorretos." });
+                })
+                .catch((erro) => {
+                    resposta.status(500).json({ "status": false, "mensagem": "Erro ao realizar o login: " + erro.message });
+                });
+            } else {
+                resposta.status(400).json({ "status": false, "mensagem": "Consulta inválida." });
+            }
+        } else
+            resposta.status(400).json({ "status":false, "mensagem":"Requisição inválida."});
     }
 }

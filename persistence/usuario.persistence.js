@@ -89,4 +89,19 @@ export default class UsuarioPersistence {
         await conexao.release();
         return dataBase;
     }
+
+    async contaAdm(conexao) {
+        const sql = `SELECT COUNT(*) AS total FROM usuario WHERE privilegio = 'A'`;
+        const [resultado] = await conexao.execute(sql);
+        await conexao.release();
+        return resultado[0].total;
+    }
+
+    async login(conexao, termo) {
+        const sql = `SELECT senha, privilegio FROM usuario WHERE email = ?`;
+        let parametros = [termo];
+        const [dataBase] = await conexao.execute(sql,parametros);
+        await conexao.release();
+        return dataBase ? dataBase[0] : null;
+    }
 }
