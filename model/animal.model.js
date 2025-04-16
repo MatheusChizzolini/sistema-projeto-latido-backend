@@ -9,8 +9,10 @@ export default class Animal {
     #porte;
     #observacao;
     #chip;
+    #sexo;
+    #foto;
 
-    constructor(id = 0, nome = "", raca = "", status = "", peso = 0, porte = "", observacao = "", chip = 0) {
+    constructor(id = 0, nome = "", raca = "", status = "", peso = 0, porte = "", observacao = "", chip = 0, sexo = "", foto = "") {
         this.#id = id;
         this.#nome = nome;
         this.#raca = raca;
@@ -19,6 +21,8 @@ export default class Animal {
         this.#porte = porte;
         this.#observacao = observacao;
         this.#chip = chip;
+        this.#sexo = sexo;
+        this.#foto = foto;
     }
 
     get id() {
@@ -85,9 +89,35 @@ export default class Animal {
         this.#chip = novoChip;
     }
 
+    get sexo() {
+        return this.#sexo;
+    }
+
+    set sexo(novoSexo) {
+        this.#sexo = novoSexo;
+    }
+
+    get foto() {
+        return this.#foto;
+    }
+
+    set foto(novaFoto) {
+        this.#foto = novaFoto;
+    }
+
     validarAnimal(animal) {
-        if(animal instanceof Animal){
-            if(animal.nome !== "" && animal.raca !== "" && animal.status !== "" && animal.peso > 0 && animal.porte !== "" && animal.observacao !== "" && animal.chip !== ""){
+        if (animal instanceof Animal) {
+            if (
+                animal.nome !== "" &&
+                animal.raca !== "" &&
+                animal.status !== "" &&
+                animal.peso > 0 &&
+                animal.porte !== "" &&
+                animal.observacao !== "" &&
+                animal.chip !== "" &&
+                animal.sexo !== "" &&
+                animal.foto !== ""
+            ) {
                 return 1;
             }
             return 0;

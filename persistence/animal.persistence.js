@@ -19,6 +19,8 @@ export default class AnimalDAO {
                     porte CHAR(1),
                     observacao VARCHAR(500) NOT NULL,
                     chip INT NOT NULL,
+                    sexo VARCHAR(10) NOT NULL,
+                    foto VARCHAR(255) NOT NULL,
                     CONSTRAINT pk_id PRIMARY KEY (id)
                 );
             `;
@@ -31,8 +33,8 @@ export default class AnimalDAO {
     async incluir(conexao, animal) {
         if (animal instanceof Animal) {
             const sql = `
-                INSERT INTO Animal (nome, raca, status, peso, porte, observacao, chip)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO Animal (nome, raca, status, peso, porte, observacao, chip, sexo, foto)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
             const parametros = [
                 animal.nome,
@@ -41,7 +43,9 @@ export default class AnimalDAO {
                 animal.peso,
                 animal.porte,
                 animal.observacao,
-                animal.chip
+                animal.chip,
+                animal.sexo,
+                animal.foto
             ];
             const resultado = await conexao.execute(sql, parametros);
             animal.id = resultado[0].insertId;
@@ -53,7 +57,7 @@ export default class AnimalDAO {
         if (animal instanceof Animal) {
             const sql = `
                 UPDATE Animal 
-                SET nome = ?, raca = ?, status = ?, peso = ?, porte = ?, observacao = ?, chip = ? 
+                SET nome = ?, raca = ?, status = ?, peso = ?, porte = ?, observacao = ?, chip = ?, sexo = ?, foto = ? 
                 WHERE id = ?
             `;
             const parametros = [
@@ -64,7 +68,8 @@ export default class AnimalDAO {
                 animal.porte,
                 animal.observacao,
                 animal.chip,
-                animal.id
+                animal.sexo,
+                animal.foto
             ];
             await conexao.execute(sql, parametros);
             await conexao.release();
